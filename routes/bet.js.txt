@@ -1,0 +1,22 @@
+const express = require("express");
+const db = require("../database");
+
+const router = express.Router();
+
+router.post("/place", (req, res) => {
+  const { user_id, amount, odds } = req.body;
+  const win = amount * odds;
+
+  db.run(
+    "INSERT INTO bets (user_id, amount, odds, win) VALUES (?, ?, ?, ?)",
+    [user_id, amount, odds, win],
+    () => {
+      res.json({
+        message: "Bahis alındı",
+        kazanilacak: win
+      });
+    }
+  );
+});
+
+module.exports = router;
